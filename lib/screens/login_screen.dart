@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'register_screen.dart';
+import 'home_screen.dart'; // Tambahin import HomeScreen di sini
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -19,10 +20,15 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
-                  Text("Welcome to", style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500)),
+                  Text("Welcome to",
+                      style:
+                          TextStyle(fontSize: 26, fontWeight: FontWeight.w500)),
                   Text(
                     "PlantNet!",
-                    style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: Color(0xFF08644C)),
+                    style: TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF08644C)),
                   ),
                 ],
               ),
@@ -52,19 +58,29 @@ class LoginScreen extends StatelessWidget {
                     );
                   },
                 ),
-                const Text("Forget password?", style: TextStyle(color: Color(0xFF08644C))),
+                const Text("Forget password?",
+                    style: TextStyle(color: Color(0xFF08644C))),
               ],
             ),
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  // Tambahan pindah ke HomeScreen
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF08644C),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 50),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 50),
                 ),
-                child: const Text("Sign In", style: TextStyle(fontSize: 18, color: Colors.white)),
+                child: const Text("Sign In",
+                    style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
             ),
             const SizedBox(height: 20),
@@ -73,17 +89,21 @@ class LoginScreen extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const RegisterScreen()),
                 );
               },
               child: const Text(
                 "Sign Up Here",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF08644C)),
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF08644C)),
               ),
             ),
             const SizedBox(height: 30),
 
-            // Tambahan "Or Sign in With"
+            // Or Sign in With
             Row(
               children: const [
                 Expanded(child: Divider(color: Colors.black)),
@@ -96,7 +116,6 @@ class LoginScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Tambahan tombol Google & Facebook
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -115,18 +134,22 @@ class LoginScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+        Text(label,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
         const SizedBox(height: 5),
         TextField(
           obscureText: isPassword,
           decoration: InputDecoration(
             hintText: hint,
-            suffixIcon: isPassword ? const Icon(Icons.visibility_off, color: Color(0xFF08644C)) : null,
+            suffixIcon: isPassword
+                ? const Icon(Icons.visibility_off, color: Color(0xFF08644C))
+                : null,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: Color(0xFF08644C)),
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
           ),
         ),
       ],
@@ -144,7 +167,8 @@ class LoginScreen extends StatelessWidget {
           border: Border.all(color: const Color(0xFF08644C)),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Image.asset(assetPath, width: 30, height: 30, fit: BoxFit.contain),
+        child:
+            Image.asset(assetPath, width: 30, height: 30, fit: BoxFit.contain),
       ),
     );
   }

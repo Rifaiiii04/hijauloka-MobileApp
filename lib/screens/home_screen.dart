@@ -1,40 +1,66 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final FocusNode _searchFocusNode = FocusNode();
+  bool _isSearchActive = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchFocusNode.addListener(_onSearchFocusChange);
+  }
+
+  @override
+  void dispose() {
+    _searchFocusNode.removeListener(_onSearchFocusChange);
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _onSearchFocusChange() {
+    setState(() {
+      _isSearchActive = _searchFocusNode.hasFocus;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
+        toolbarHeight: 80,
         backgroundColor: const Color(0xFF08644C),
         elevation: 0,
-        title: const Text(
-          "PlantNet",
-          style: TextStyle(
-            fontFamily: "Poppins", // Tambahin font Poppins di sini
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.white,
-          ),
-        ),
-        actions: const [
-          Icon(Icons.shopping_cart_outlined, color: Colors.white),
-          SizedBox(width: 20),
-          Icon(Icons.notifications_none, color: Colors.white),
-          SizedBox(width: 20),
-        ],
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+        ), // Fixed: Added closing parenthesis here
+        title: _buildSearchBar(),
+        actions: _isSearchActive
+            ? null
+            : const [
+                Icon(Icons.shopping_cart_outlined, color: Colors.white),
+                SizedBox(width: 20),
+                Icon(Icons.notifications_none, color: Colors.white),
+                SizedBox(width: 20),
+                Icon(Icons.chat, color: Colors.white),
+                SizedBox(width: 20),
+              ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          _buildSearchBar(),
           const SizedBox(height: 20),
           _buildBanner(),
           const SizedBox(height: 20),
           const Text(
-            "Trending plant",
+            "For You",
             style: TextStyle(
               fontFamily: "Poppins",
               fontSize: 18,
@@ -49,21 +75,32 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildSearchBar() {
-    return TextField(
-      style: const TextStyle(fontFamily: "Poppins"),
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.search, color: Colors.grey),
-        suffixIcon: const Icon(Icons.filter_list, color: Colors.grey),
-        hintText: "Search plant",
-        hintStyle: const TextStyle(fontFamily: "Poppins"),
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide.none,
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      width: _isSearchActive
+          ? MediaQuery.of(context).size.width * 1
+          : MediaQuery.of(context).size.width * 0.6,
+      child: TextField(
+        focusNode: _searchFocusNode,
+        style: const TextStyle(fontFamily: "Poppins", color: Colors.white),
+        decoration: InputDecoration(
+          prefixIcon: const Icon(Icons.search, color: Colors.white),
+          suffixIcon: _isSearchActive
+              ? IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white),
+                  onPressed: () => _searchFocusNode.unfocus(),
+                )
+              : null,
+          hintText: "Search plant",
+          hintStyle: const TextStyle(fontFamily: "Poppins", color: Colors.white70),
+          filled: true,
+          fillColor: Colors.white.withOpacity(0.2),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       ),
     );
   }
@@ -109,16 +146,18 @@ class HomeScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         return Card(
           elevation: 2,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(10)),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(10),
+                    ),
                     image: DecorationImage(
                       image: AssetImage("assets/plant${index + 1}.png"),
                       fit: BoxFit.cover,

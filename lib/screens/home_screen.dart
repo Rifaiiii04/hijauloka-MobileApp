@@ -12,7 +12,12 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         title: const Text(
           "PlantNet",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+          style: TextStyle(
+            fontFamily: "Poppins", // Tambahin font Poppins di sini
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
         ),
         actions: const [
           Icon(Icons.shopping_cart_outlined, color: Colors.white),
@@ -21,7 +26,6 @@ class HomeScreen extends StatelessWidget {
           SizedBox(width: 20),
         ],
       ),
-      drawer: const Drawer(),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -31,29 +35,35 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 20),
           const Text(
             "Trending plant",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontFamily: "Poppins",
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 10),
           _buildPlantList(),
         ],
       ),
-      bottomNavigationBar: _buildBottomNav(),
     );
   }
 
   Widget _buildSearchBar() {
     return TextField(
+      style: const TextStyle(fontFamily: "Poppins"),
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.search, color: Colors.grey),
         suffixIcon: const Icon(Icons.filter_list, color: Colors.grey),
         hintText: "Search plant",
+        hintStyle: const TextStyle(fontFamily: "Poppins"),
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide.none,
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       ),
     );
   }
@@ -74,7 +84,11 @@ class HomeScreen extends StatelessWidget {
           padding: EdgeInsets.all(20),
           child: Text(
             "New Product!\nNew plant collection just for you.",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontFamily: "Poppins",
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
@@ -95,14 +109,16 @@ class HomeScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         return Card(
           elevation: 2,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(10)),
                     image: DecorationImage(
                       image: AssetImage("assets/plant${index + 1}.png"),
                       fit: BoxFit.cover,
@@ -112,39 +128,36 @@ class HomeScreen extends StatelessWidget {
               ),
               const Padding(
                 padding: EdgeInsets.all(10),
-                child: Text("Plant Name", style: TextStyle(fontWeight: FontWeight.bold)),
+                child: Text(
+                  "Plant Name",
+                  style: TextStyle(
+                    fontFamily: "Poppins",
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text("Rp 100.000"),
+                child: Text(
+                  "Rp 100.000",
+                  style: TextStyle(fontFamily: "Poppins"),
+                ),
               ),
               const SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerRight,
                 child: IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.shopping_cart_outlined, color: Color(0xFF08644C)),
+                  icon: const Icon(
+                    Icons.shopping_cart_outlined,
+                    color: Color(0xFF08644C),
+                  ),
                 ),
               ),
             ],
           ),
         );
       },
-    );
-  }
-
-  Widget _buildBottomNav() {
-    return BottomNavigationBar(
-      selectedItemColor: const Color(0xFF08644C),
-      unselectedItemColor: Colors.grey,
-      showUnselectedLabels: true,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.book), label: "Collection"),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Popular"),
-        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-      ],
     );
   }
 }

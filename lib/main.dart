@@ -12,7 +12,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Poppins'), // Setel font default ke Poppins
+      theme: ThemeData(
+        fontFamily: "Poppins", // Tambahin font Poppins di sini
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontFamily: "Poppins"),
+          bodyMedium: TextStyle(fontFamily: "Poppins"),
+          bodySmall: TextStyle(fontFamily: "Poppins"),
+        ),
+      ),
       home: const LoginScreen(),
     );
   }

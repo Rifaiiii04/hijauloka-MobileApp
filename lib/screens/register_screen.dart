@@ -8,87 +8,131 @@ class RegisterScreen extends StatelessWidget {
     final ValueNotifier<bool> acceptTerms = ValueNotifier<bool>(false);
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 80),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      "Create Account",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: "Poppins",
+                      ),
+                    ),
+                    Text(
+                      "PlantNet!",
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF08644C),
+                        fontFamily: "Poppins",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 25),
+              _buildInputField("Full Name", "John Doe", false),
+              const SizedBox(height: 12),
+              _buildInputField("Email", "johndoe@gmail.com", false),
+              const SizedBox(height: 12),
+              _buildInputField("Password", "********", true),
+              const SizedBox(height: 12),
+              _buildInputField("Confirm Password", "********", true),
+              const SizedBox(height: 8),
+              ValueListenableBuilder<bool>(
+                valueListenable: acceptTerms,
+                builder: (context, value, child) {
+                  return Row(
+                    children: [
+                      Checkbox(
+                        value: value,
+                        onChanged: (newValue) {
+                          acceptTerms.value = newValue!;
+                        },
+                        activeColor: const Color(0xFF08644C),
+                      ),
+                      const Expanded(
+                        child: Text(
+                          "I accept the Terms & Conditions",
+                          style: TextStyle(fontSize: 12, fontFamily: "Poppins"),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+              const SizedBox(height: 15),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF08644C),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 50),
+                  ),
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontFamily: "Poppins"),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "Already have an account? Sign In",
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF08644C),
+                      fontFamily: "Poppins"),
+                ),
+              ),
+              const SizedBox(height: 25),
+              Row(
                 children: const [
-                  Text("Create Account", style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500)),
-                  Text("PlantNet!", style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: Color(0xFF08644C))),
+                  Expanded(child: Divider(color: Colors.black)),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      "Or Sign up With",
+                      style: TextStyle(fontSize: 12, fontFamily: "Poppins"),
+                    ),
+                  ),
+                  Expanded(child: Divider(color: Colors.black)),
                 ],
               ),
-            ),
-            const SizedBox(height: 30),
-            _buildInputField("Full Name", "John Doe", false),
-            const SizedBox(height: 15),
-            _buildInputField("Email", "johndoe@gmail.com", false),
-            const SizedBox(height: 15),
-            _buildInputField("Password", "********", true),
-            const SizedBox(height: 15),
-            _buildInputField("Confirm Password", "********", true),
-            const SizedBox(height: 10),
-            ValueListenableBuilder<bool>(
-              valueListenable: acceptTerms,
-              builder: (context, value, child) {
-                return Row(
-                  children: [
-                    Checkbox(
-                      value: value,
-                      onChanged: (newValue) {
-                        acceptTerms.value = newValue!;
-                      },
-                      activeColor: const Color(0xFF08644C),
-                    ),
-                    const Expanded(child: Text("I accept the Terms & Conditions")),
-                  ],
-                );
-              },
-            ),
-            const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF08644C),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 50),
-                ),
-                child: const Text("Sign Up", style: TextStyle(fontSize: 18, color: Colors.white)),
+              const SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildSocialButton("assets/google.png"),
+                  const SizedBox(width: 15),
+                  _buildSocialButton("assets/facebook.png"),
+                ],
               ),
-            ),
-            const SizedBox(height: 20),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Text("Already have an account? Sign In", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF08644C))),
-            ),
-            const SizedBox(height: 30),
-            Row(
-              children: const [
-                Expanded(child: Divider(color: Colors.black)),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text("Or Sign up With"),
-                ),
-                Expanded(child: Divider(color: Colors.black)),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildSocialButton("assets/google.png"),
-                const SizedBox(width: 20),
-                _buildSocialButton("assets/facebook.png"),
-              ],
-            ),
-          ],
+              const SizedBox(height: 25),
+            ],
+          ),
         ),
       ),
     );
@@ -98,18 +142,30 @@ class RegisterScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 5),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            fontFamily: "Poppins",
+          ),
+        ),
+        const SizedBox(height: 3),
         TextField(
           obscureText: isPassword,
           decoration: InputDecoration(
             hintText: hint,
-            suffixIcon: isPassword ? const Icon(Icons.visibility_off, color: Color(0xFF08644C)) : null,
+            hintStyle: const TextStyle(fontSize: 12, fontFamily: "Poppins"),
+            suffixIcon: isPassword
+                ? const Icon(Icons.visibility_off,
+                    color: Color(0xFF08644C), size: 18)
+                : null,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: Color(0xFF08644C)),
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
           ),
         ),
       ],
@@ -120,14 +176,15 @@ class RegisterScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        width: 50,
-        height: 50,
-        padding: const EdgeInsets.all(10),
+        width: 40,
+        height: 40,
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           border: Border.all(color: const Color(0xFF08644C)),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(6),
         ),
-        child: Image.asset(assetPath, width: 30, height: 30, fit: BoxFit.contain),
+        child:
+            Image.asset(assetPath, width: 25, height: 25, fit: BoxFit.contain),
       ),
     );
   }

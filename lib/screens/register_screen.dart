@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'digit_code_screen.dart'; // Import file DigitCodeScreen
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -15,7 +16,7 @@ class RegisterScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 80),
+              const SizedBox(height: 150),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
@@ -42,13 +43,13 @@ class RegisterScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 25),
-              _buildInputField("Full Name", "John Doe", false),
+              _buildInputField("Full Name", false),
               const SizedBox(height: 12),
-              _buildInputField("Email", "johndoe@gmail.com", false),
+              _buildInputField("Nomor HP", false),
               const SizedBox(height: 12),
-              _buildInputField("Password", "********", true),
+              _buildInputField("Password", true),
               const SizedBox(height: 12),
-              _buildInputField("Confirm Password", "********", true),
+              _buildInputField("Confirm Password", true),
               const SizedBox(height: 8),
               ValueListenableBuilder<bool>(
                 valueListenable: acceptTerms,
@@ -75,7 +76,15 @@ class RegisterScreen extends StatelessWidget {
               const SizedBox(height: 15),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // Navigasi ke DigitCodeScreen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DigitCodeScreen(),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF08644C),
                     shape: RoundedRectangleBorder(
@@ -138,37 +147,23 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  static Widget _buildInputField(String label, String hint, bool isPassword) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            fontFamily: "Poppins",
-          ),
+  static Widget _buildInputField(String label, bool isPassword) {
+    return TextField(
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(fontFamily: "Poppins"),
+        suffixIcon: isPassword
+            ? const Icon(Icons.visibility_off,
+                color: Color(0xFF08644C), size: 18)
+            : null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Color(0xFF08644C)),
         ),
-        const SizedBox(height: 3),
-        TextField(
-          obscureText: isPassword,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: const TextStyle(fontSize: 12, fontFamily: "Poppins"),
-            suffixIcon: isPassword
-                ? const Icon(Icons.visibility_off,
-                    color: Color(0xFF08644C), size: 18)
-                : null,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Color(0xFF08644C)),
-            ),
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-          ),
-        ),
-      ],
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+      ),
     );
   }
 

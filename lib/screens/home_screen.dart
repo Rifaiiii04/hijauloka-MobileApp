@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_app_bar.dart';
 import '../widgets/category_filter.dart';
 import '../widgets/banner.dart';
+import '../widgets/custom_app_bar.dart'; // Import the CustomAppBar
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: CustomAppBar(
+      appBar: CustomAppBar( // Replace AppBar with CustomAppBar
         searchFocusNode: _searchFocusNode,
         isSearchActive: _isSearchActive,
       ),
@@ -74,10 +74,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildPlantList() {
+    // Simulate different plant lists based on the selected category
+    List<String> plants = [];
+    if (_selectedCategory == "All") {
+      plants = ["Plant 1", "Plant 2", "Plant 3", "Plant 4"];
+    } else if (_selectedCategory == "Indoor") {
+      plants = ["Indoor Plant 1", "Indoor Plant 2"];
+    } else if (_selectedCategory == "Outdoor") {
+      plants = ["Outdoor Plant 1", "Outdoor Plant 2", "Outdoor Plant 3"];
+    }
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: 4,
+      itemCount: plants.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 10,
@@ -110,9 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Plant Name",
-                      style: TextStyle(
+                    Text(
+                      plants[index],
+                      style: const TextStyle(
                         fontFamily: "Poppins",
                         fontWeight: FontWeight.bold,
                       ),
@@ -125,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           "Rp. 25.000",
                           style: TextStyle(
                             fontFamily: "Poppins",
-                            color: const Color.fromARGB(255, 27, 81, 29),
+                            color: Color.fromARGB(255, 27, 81, 29),
                             fontWeight: FontWeight.bold,
                           ),
                         ),

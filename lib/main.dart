@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: "Poppins", // Tambahin font Poppins di sini
+        fontFamily: "Poppins", 
         textTheme: const TextTheme(
           bodyLarge: TextStyle(fontFamily: "Poppins"),
           bodyMedium: TextStyle(fontFamily: "Poppins"),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../widgets/custom_app_bar.dart';
+import '../widgets/category_filter.dart';
+import '../widgets/banner.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,6 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final FocusNode _searchFocusNode = FocusNode();
   bool _isSearchActive = false;
+  String _selectedCategory = "All";
 
   @override
   void initState() {
@@ -30,34 +34,29 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _setCategory(String category) {
+    setState(() {
+      _selectedCategory = category;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        toolbarHeight: 80,
-        backgroundColor: const Color(0xFF08644C),
-        elevation: 0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-        ), // Fixed: Added closing parenthesis here
-        title: _buildSearchBar(),
-        actions: _isSearchActive
-            ? null
-            : const [
-                Icon(Icons.shopping_cart_outlined, color: Colors.white),
-                SizedBox(width: 20),
-                Icon(Icons.notifications_none, color: Colors.white),
-                SizedBox(width: 20),
-                Icon(Icons.chat, color: Colors.white),
-                SizedBox(width: 20),
-              ],
+      appBar: CustomAppBar(
+        searchFocusNode: _searchFocusNode,
+        isSearchActive: _isSearchActive,
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
+          CategoryFilter(
+            selectedCategory: _selectedCategory,
+            onCategorySelected: _setCategory,
+          ),
           const SizedBox(height: 20),
-          _buildBanner(),
+          const BannerWidget(),
           const SizedBox(height: 20),
           const Text(
             "For You",
@@ -70,64 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 10),
           _buildPlantList(),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSearchBar() {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      width: _isSearchActive
-          ? MediaQuery.of(context).size.width * 1
-          : MediaQuery.of(context).size.width * 0.6,
-      child: TextField(
-        focusNode: _searchFocusNode,
-        style: const TextStyle(fontFamily: "Poppins", color: Colors.white),
-        decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.search, color: Colors.white),
-          suffixIcon: _isSearchActive
-              ? IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
-                  onPressed: () => _searchFocusNode.unfocus(),
-                )
-              : null,
-          hintText: "Search plant",
-          hintStyle: const TextStyle(fontFamily: "Poppins", color: Colors.white70),
-          filled: true,
-          fillColor: Colors.white.withOpacity(0.2),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBanner() {
-    return Container(
-      height: 150,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          image: AssetImage("assets/banner.png"),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: const Align(
-        alignment: Alignment.bottomLeft,
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Text(
-            "New Product!\nNew plant collection just for you.",
-            style: TextStyle(
-              fontFamily: "Poppins",
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -155,9 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(10),
-                    ),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(10)),
                     image: DecorationImage(
                       image: AssetImage("assets/plant${index + 1}.png"),
                       fit: BoxFit.cover,
@@ -165,32 +105,45 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  "Plant Name",
-                  style: TextStyle(
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  "Rp 100.000",
-                  style: TextStyle(fontFamily: "Poppins"),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.shopping_cart_outlined,
-                    color: Color(0xFF08644C),
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Plant Name",
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Rp. 25.000",
+                          style: TextStyle(
+                            fontFamily: "Poppins",
+                            color: const Color.fromARGB(255, 27, 81, 29),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 27, 81, 29),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(
+                            Icons.add_shopping_cart,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],

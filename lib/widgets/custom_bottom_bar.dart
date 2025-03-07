@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
-import 'profile_screen.dart';
+import '../screens/home_screen.dart';
+import '../screens/profile_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class CustomBottomBar extends StatefulWidget {
+  const CustomBottomBar({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<CustomBottomBar> createState() => _CustomBottomBarState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _CustomBottomBarState extends State<CustomBottomBar> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [

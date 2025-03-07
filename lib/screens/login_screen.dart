@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'register_screen.dart';
-import 'main_screen.dart'; 
+import '../widgets/custom_bottom_bar.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -27,7 +27,9 @@ class LoginScreen extends StatelessWidget {
                     Text(
                       "Welcome to",
                       style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.w500, fontFamily: "Poppins"),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins"),
                     ),
                     Text(
                       "PlantNet!",
@@ -61,14 +63,16 @@ class LoginScreen extends StatelessWidget {
                             },
                             activeColor: const Color(0xFF08644C),
                           ),
-                          const Text("Remember Me", style: TextStyle(fontFamily: "Poppins")),
+                          const Text("Remember Me",
+                              style: TextStyle(fontFamily: "Poppins")),
                         ],
                       );
                     },
                   ),
                   const Text(
                     "Forget password?",
-                    style: TextStyle(color: Color(0xFF08644C), fontFamily: "Poppins"),
+                    style: TextStyle(
+                        color: Color(0xFF08644C), fontFamily: "Poppins"),
                   ),
                 ],
               ),
@@ -79,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const MainScreen(),
+                        builder: (context) => const CustomBottomBar(),
                       ),
                     );
                   },
@@ -93,7 +97,10 @@ class LoginScreen extends StatelessWidget {
                   ),
                   child: const Text(
                     "Sign In",
-                    style: TextStyle(fontSize: 16, color: Colors.white, fontFamily: "Poppins"),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontFamily: "Poppins"),
                   ),
                 ),
               ),
@@ -124,7 +131,8 @@ class LoginScreen extends StatelessWidget {
                   Expanded(child: Divider(color: Colors.black)),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text("Or Sign in With", style: TextStyle(fontFamily: "Poppins")),
+                    child: Text("Or Sign in With",
+                        style: TextStyle(fontFamily: "Poppins")),
                   ),
                   Expanded(child: Divider(color: Colors.black)),
                 ],

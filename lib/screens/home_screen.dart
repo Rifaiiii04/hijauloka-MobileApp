@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/category_controller.dart';
+import '../controllers/app_bar_controller.dart';
 import '../widgets/category_filter.dart';
 import '../widgets/banner.dart';
 import '../widgets/custom_app_bar.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  final CategoryController categoryController = Get.put(CategoryController());
+  final AppBarController appBarController = Get.put(AppBarController());
 
   @override
   Widget build(BuildContext context) {
-    final CategoryController categoryController = Get.put(CategoryController());
-
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: CustomAppBar(
-        searchFocusNode: FocusNode(),
-        isSearchActive: false,
-      ),
+      appBar: CustomAppBar(),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          const CategoryFilter(),
-          const SizedBox(height: 20),
           const BannerWidget(),
+          const SizedBox(height: 20),
+          const CategoryFilter(),
           const SizedBox(height: 20),
           const Text(
             "For You",

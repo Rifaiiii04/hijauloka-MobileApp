@@ -1,51 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/app_bar_controller.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final FocusNode searchFocusNode;
-  final bool isSearchActive;
+  final AppBarController controller = Get.put(AppBarController());
 
-  const CustomAppBar({
-    super.key,
-    required this.searchFocusNode,
-    required this.isSearchActive,
-  });
+  CustomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      automaticallyImplyLeading: false, // Menghilangkan icon panah back
-      toolbarHeight: 80,
-      backgroundColor: const Color(0xFF08644C),
-      elevation: 0,
-      title: _buildSearchBar(context),
-      actions: isSearchActive
-          ? null
-          : const [
-              Icon(Icons.shopping_cart_outlined, color: Colors.white),
-              SizedBox(width: 20),
-              Icon(Icons.notifications_none, color: Colors.white),
-              SizedBox(width: 20),
-              Icon(Icons.chat, color: Colors.white),
-              SizedBox(width: 20),
-            ],
-    );
+    return Obx(() => AppBar(
+          automaticallyImplyLeading: false,
+          toolbarHeight: 80,
+          backgroundColor: const Color(0xFF08644C),
+          elevation: 0,
+          title: _buildSearchBar(context),
+          actions: controller.isSearchActive.value
+              ? [] // Menghilangkan ikon saat search aktif
+              : const [
+                  Icon(Icons.shopping_cart_outlined, color: Colors.white),
+                  SizedBox(width: 20),
+                  Icon(Icons.notifications_none, color: Colors.white),
+                  SizedBox(width: 20),
+                  Icon(Icons.chat, color: Colors.white),
+                  SizedBox(width: 20),
+                ],
+        ));
   }
 
   Widget _buildSearchBar(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      width: isSearchActive
-          ? MediaQuery.of(context).size.width * 1
+      curve: Curves.easeInOut,
+      width: controller.isSearchActive.value
+          ? MediaQuery.of(context).size.width * 0.9
           : MediaQuery.of(context).size.width * 0.6,
       child: TextField(
-        focusNode: searchFocusNode,
+        focusNode: controller.searchFocusNode,
         style: const TextStyle(fontFamily: "Poppins", color: Colors.white),
         decoration: InputDecoration(
           prefixIcon: const Icon(Icons.search, color: Colors.white),
-          suffixIcon: isSearchActive
+          suffixIcon: controller.isSearchActive.value
               ? IconButton(
                   icon: const Icon(Icons.close, color: Colors.white),
-                  onPressed: () => searchFocusNode.unfocus(),
+                  onPressed: () {
+                    controller.closeSearch();
+                  },
                 )
               : null,
           hintText: "Search plant",

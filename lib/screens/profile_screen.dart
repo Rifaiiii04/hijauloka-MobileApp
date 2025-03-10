@@ -13,7 +13,7 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const HomeScreen(),
+    HomeScreen(),
     const ProfileScreen(),
   ];
 
@@ -55,39 +55,47 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
-        child: Container(
-          height: 100,
-          decoration: const BoxDecoration(
-            color: Color(0xFF08644C),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 40),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.settings, color: Colors.white),
-                  onPressed: () {},
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.shopping_cart, color: Colors.white),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.notifications, color: Colors.white),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.chat, color: Colors.white),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              ],
+        child: Stack(
+          children: [
+            Container(
+              height: 100,
+              decoration: const BoxDecoration(
+                color: Color(0xFF08644C),
+              ),
             ),
-          ),
+            Positioned(
+              left: 16,
+              top: 20,
+              child: IconButton(
+                icon: const Icon(Icons.settings, color: Colors.white),
+                onPressed: () {},
+              ),
+            ),
+            Positioned(
+              right: 90, // Geser lebih ke kiri biar sejajar
+              top: 20,
+              child: IconButton(
+                icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
+                onPressed: () {},
+              ),
+            ),
+            Positioned(
+              right: 50,
+              top: 20,
+              child: IconButton(
+                icon: const Icon(Icons.notifications_none, color: Colors.white),
+                onPressed: () {},
+              ),
+            ),
+            Positioned(
+              right: 10,
+              top: 20,
+              child: IconButton(
+                icon: const Icon(Icons.chat, color: Colors.white),
+                onPressed: () {},
+              ),
+            ),
+          ],
         ),
       ),
       body: SingleChildScrollView(
@@ -141,7 +149,8 @@ class ProfileScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()),
                   );
                 },
                 style: ElevatedButton.styleFrom(

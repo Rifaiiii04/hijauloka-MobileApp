@@ -12,7 +12,7 @@ class CustomBottomBar extends StatefulWidget {
 class _CustomBottomBarState extends State<CustomBottomBar> {
   int _selectedIndex = 0;
   final List<Widget> _pages = [
-    const HomeScreen(),
+    HomeScreen(),
     const ProfileScreen(), // Tambahkan halaman lain jika ada
   ];
 

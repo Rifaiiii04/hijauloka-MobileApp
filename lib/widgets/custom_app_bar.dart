@@ -13,12 +13,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false, // Menghilangkan icon panah back
       toolbarHeight: 80,
       backgroundColor: const Color(0xFF08644C),
       elevation: 0,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-      ),
       title: _buildSearchBar(context),
       actions: isSearchActive
           ? null
@@ -51,14 +49,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 )
               : null,
           hintText: "Search plant",
-          hintStyle: const TextStyle(fontFamily: "Poppins", color: Colors.white70),
+          hintStyle:
+              const TextStyle(fontFamily: "Poppins", color: Colors.white70),
           filled: true,
           fillColor: Colors.white.withOpacity(0.2),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide.none,
           ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         ),
       ),
     );

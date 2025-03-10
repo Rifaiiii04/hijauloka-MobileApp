@@ -10,9 +10,8 @@ class LoginScreen extends StatelessWidget {
     final ValueNotifier<bool> rememberMe = ValueNotifier<bool>(false);
 
     return Scaffold(
-      resizeToAvoidBottomInset: true, // Fix biar layar naik pas keyboard muncul
+      resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
-        // Supaya bisa scroll kalau layar sempit
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
@@ -32,7 +31,7 @@ class LoginScreen extends StatelessWidget {
                           fontFamily: "Poppins"),
                     ),
                     Text(
-                      "PlantNet!",
+                      "HijauLoka",
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -83,7 +82,7 @@ class LoginScreen extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CustomBottomBar(),
+                        builder: (context) => const CustomBottomBar(), 
                       ),
                     );
                   },
@@ -107,7 +106,7 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 25),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const RegisterScreen(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'screens/login_screen.dart';
 
 void main() {
@@ -10,10 +11,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: "Poppins", 
+        fontFamily: "Poppins",
         textTheme: const TextTheme(
           bodyLarge: TextStyle(fontFamily: "Poppins"),
           bodyMedium: TextStyle(fontFamily: "Poppins"),

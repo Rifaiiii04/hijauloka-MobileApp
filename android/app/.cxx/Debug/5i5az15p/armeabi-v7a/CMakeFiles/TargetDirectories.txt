@@ -1,0 +1,2 @@
+G:/Kuliah/Me/semester 4/ISAD PROJECT/Mobile/Code/plantnet/android/app/.cxx/Debug/5i5az15p/armeabi-v7a/CMakeFiles/edit_cache.dir
+G:/Kuliah/Me/semester 4/ISAD PROJECT/Mobile/Code/plantnet/android/app/.cxx/Debug/5i5az15p/armeabi-v7a/CMakeFiles/rebuild_cache.dir

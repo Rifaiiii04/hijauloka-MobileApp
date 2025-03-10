@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'digit_code_screen.dart'; // Import file DigitCodeScreen
+import 'digit_code_screen.dart';
+import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -16,7 +17,7 @@ class RegisterScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 150),
+              const SizedBox(height: 100),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
@@ -31,7 +32,7 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "PlantNet!",
+                      "HijauLoka",
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -77,8 +78,7 @@ class RegisterScreen extends StatelessWidget {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigasi ke DigitCodeScreen
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const DigitCodeScreen(),
@@ -105,7 +105,12 @@ class RegisterScreen extends StatelessWidget {
               const SizedBox(height: 15),
               GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                  );
                 },
                 child: const Text(
                   "Already have an account? Sign In",

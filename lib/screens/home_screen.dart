@@ -1,60 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/category_controller.dart';
 import '../widgets/category_filter.dart';
 import '../widgets/banner.dart';
-import '../widgets/custom_app_bar.dart'; // Import the CustomAppBar
+import '../widgets/custom_app_bar.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final FocusNode _searchFocusNode = FocusNode();
-  bool _isSearchActive = false;
-  String _selectedCategory = "All";
-
-  @override
-  void initState() {
-    super.initState();
-    _searchFocusNode.addListener(_onSearchFocusChange);
-  }
-
-  @override
-  void dispose() {
-    _searchFocusNode.removeListener(_onSearchFocusChange);
-    _searchFocusNode.dispose();
-    super.dispose();
-  }
-
-  void _onSearchFocusChange() {
-    setState(() {
-      _isSearchActive = _searchFocusNode.hasFocus;
-    });
-  }
-
-  void _setCategory(String category) {
-    setState(() {
-      _selectedCategory = category;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final CategoryController categoryController = Get.put(CategoryController());
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: CustomAppBar( // Replace AppBar with CustomAppBar
-        searchFocusNode: _searchFocusNode,
-        isSearchActive: _isSearchActive,
+      appBar: CustomAppBar(
+        searchFocusNode: FocusNode(),
+        isSearchActive: false,
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          CategoryFilter(
-            selectedCategory: _selectedCategory,
-            onCategorySelected: _setCategory,
-          ),
+          const CategoryFilter(),
           const SizedBox(height: 20),
           const BannerWidget(),
           const SizedBox(height: 20),
@@ -67,20 +34,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          _buildPlantList(),
+          Obx(() => _buildPlantList(categoryController.selectedCategory.value)),
         ],
       ),
     );
   }
 
-  Widget _buildPlantList() {
-    // Simulate different plant lists based on the selected category
+  Widget _buildPlantList(String selectedCategory) {
     List<String> plants = [];
-    if (_selectedCategory == "All") {
+    if (selectedCategory == "All") {
       plants = ["Plant 1", "Plant 2", "Plant 3", "Plant 4"];
-    } else if (_selectedCategory == "Indoor") {
+    } else if (selectedCategory == "Indoor") {
       plants = ["Indoor Plant 1", "Indoor Plant 2"];
-    } else if (_selectedCategory == "Outdoor") {
+    } else if (selectedCategory == "Outdoor") {
       plants = ["Outdoor Plant 1", "Outdoor Plant 2", "Outdoor Plant 3"];
     }
 

@@ -1,46 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/category_controller.dart';
 
 class CategoryFilter extends StatelessWidget {
-  final String selectedCategory;
-  final Function(String) onCategorySelected;
-
-  const CategoryFilter({
-    super.key,
-    required this.selectedCategory,
-    required this.onCategorySelected,
-  });
+  const CategoryFilter({super.key});
 
   @override
   Widget build(BuildContext context) {
-    List<String> categories = ["All", "Indoor", "Outdoor"];
+    final CategoryController categoryController =
+        Get.find<CategoryController>();
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: categories.map((category) {
-        return GestureDetector(
-          onTap: () => onCategorySelected(category),
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            decoration: BoxDecoration(
-              color: selectedCategory == category
-                  ? const Color(0xFF08644C)
-                  : Colors.white,
-              border: Border.all(color: const Color(0xFF08644C)),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              category,
-              style: TextStyle(
-                color: selectedCategory == category
-                    ? Colors.white
-                    : const Color(0xFF08644C),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+    return Obx(() => Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildCategoryItem("All", categoryController),
+            _buildCategoryItem("Indoor", categoryController),
+            _buildCategoryItem("Outdoor", categoryController),
+          ],
+        ));
+  }
+
+  Widget _buildCategoryItem(String category, CategoryController controller) {
+    bool isSelected = controller.selectedCategory.value == category;
+    return GestureDetector(
+      onTap: () => controller.setCategory(category),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        decoration: BoxDecoration(
+          color:
+              isSelected ? const Color.fromARGB(255, 27, 81, 29) : Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isSelected
+                ? const Color.fromARGB(255, 27, 81, 29)
+                : Colors.grey,
           ),
-        );
-      }).toList(),
+        ),
+        child: Text(
+          category,
+          style: TextStyle(
+            fontFamily: "Poppins",
+            color: isSelected ? Colors.white : Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -65,7 +65,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             Positioned(
               left: 16,
-              top: 20,
+              top: 40,
               child: IconButton(
                 icon: const Icon(Icons.settings, color: Colors.white),
                 onPressed: () {},
@@ -73,7 +73,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             Positioned(
               right: 90, // Geser lebih ke kiri biar sejajar
-              top: 20,
+              top: 40,
               child: IconButton(
                 icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
                 onPressed: () {},
@@ -81,7 +81,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             Positioned(
               right: 50,
-              top: 20,
+              top: 40,
               child: IconButton(
                 icon: const Icon(Icons.notifications_none, color: Colors.white),
                 onPressed: () {},
@@ -89,7 +89,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             Positioned(
               right: 10,
-              top: 20,
+              top: 40,
               child: IconButton(
                 icon: const Icon(Icons.chat, color: Colors.white),
                 onPressed: () {},

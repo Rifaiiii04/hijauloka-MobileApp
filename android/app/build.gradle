@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.plantnet"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = "26.3.11579264"
 
     compileOptions {

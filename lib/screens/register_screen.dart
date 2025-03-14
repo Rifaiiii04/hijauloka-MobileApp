@@ -1,13 +1,96 @@
 import 'package:flutter/material.dart';
-import 'digit_code_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
+  Future<void> _register(
+    BuildContext context,
+    String nama,
+    String email,
+    String password,
+    String alamat,
+    String noTlp,
+  ) async {
+    // Validasi input
+    if (nama.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        alamat.isEmpty ||
+        noTlp.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Semua field harus diisi!"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    const url =
+        'http://localhost/p_hijauloka/register.php'; // Sesuaikan dengan URL API PHP Anda
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'nama': nama,
+          'email': email,
+          'password': password,
+          'alamat': alamat,
+          'no_tlp': noTlp,
+        }),
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (responseData['status'] == 'success') {
+        // Tampilkan snackbar sukses
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(responseData['message']),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        // Navigasi ke LoginScreen setelah 1 detik
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
+          );
+        });
+      } else {
+        // Tampilkan snackbar error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(responseData['message']),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      // Tampilkan snackbar jika terjadi error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Terjadi kesalahan: $e"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<bool> acceptTerms = ValueNotifier<bool>(false);
+    final TextEditingController namaController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final TextEditingController alamatController = TextEditingController();
+    final TextEditingController noTlpController = TextEditingController();
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -44,45 +127,87 @@ class RegisterScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 25),
-              _buildInputField("Full Name", false),
+              TextField(
+                controller: namaController,
+                decoration: InputDecoration(
+                  labelText: "Full Name",
+                  labelStyle: const TextStyle(fontFamily: "Poppins"),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Color(0xFF08644C)),
+                  ),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                ),
+              ),
               const SizedBox(height: 12),
-              _buildInputField("Nomor HP", false),
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: "Email",
+                  labelStyle: const TextStyle(fontFamily: "Poppins"),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Color(0xFF08644C)),
+                  ),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                ),
+              ),
               const SizedBox(height: 12),
-              _buildInputField("Password", true),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: "Password",
+                  labelStyle: const TextStyle(fontFamily: "Poppins"),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Color(0xFF08644C)),
+                  ),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                ),
+              ),
               const SizedBox(height: 12),
-              _buildInputField("Confirm Password", true),
-              const SizedBox(height: 8),
-              ValueListenableBuilder<bool>(
-                valueListenable: acceptTerms,
-                builder: (context, value, child) {
-                  return Row(
-                    children: [
-                      Checkbox(
-                        value: value,
-                        onChanged: (newValue) {
-                          acceptTerms.value = newValue!;
-                        },
-                        activeColor: const Color(0xFF08644C),
-                      ),
-                      const Expanded(
-                        child: Text(
-                          "I accept the Terms & Conditions",
-                          style: TextStyle(fontSize: 12, fontFamily: "Poppins"),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+              TextField(
+                controller: alamatController,
+                decoration: InputDecoration(
+                  labelText: "Address",
+                  labelStyle: const TextStyle(fontFamily: "Poppins"),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Color(0xFF08644C)),
+                  ),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: noTlpController,
+                decoration: InputDecoration(
+                  labelText: "Phone Number",
+                  labelStyle: const TextStyle(fontFamily: "Poppins"),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Color(0xFF08644C)),
+                  ),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                ),
               ),
               const SizedBox(height: 15),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    _register(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const DigitCodeScreen(),
-                      ),
+                      namaController.text,
+                      emailController.text,
+                      passwordController.text,
+                      alamatController.text,
+                      noTlpController.text,
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -121,70 +246,9 @@ class RegisterScreen extends StatelessWidget {
                       fontFamily: "Poppins"),
                 ),
               ),
-              const SizedBox(height: 25),
-              Row(
-                children: const [
-                  Expanded(child: Divider(color: Colors.black)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      "Or Sign up With",
-                      style: TextStyle(fontSize: 12, fontFamily: "Poppins"),
-                    ),
-                  ),
-                  Expanded(child: Divider(color: Colors.black)),
-                ],
-              ),
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildSocialButton("assets/google.png"),
-                  const SizedBox(width: 15),
-                  _buildSocialButton("assets/facebook.png"),
-                ],
-              ),
-              const SizedBox(height: 25),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  static Widget _buildInputField(String label, bool isPassword) {
-    return TextField(
-      obscureText: isPassword,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(fontFamily: "Poppins"),
-        suffixIcon: isPassword
-            ? const Icon(Icons.visibility_off,
-                color: Color(0xFF08644C), size: 18)
-            : null,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFF08644C)),
-        ),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-      ),
-    );
-  }
-
-  static Widget _buildSocialButton(String assetPath) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        width: 40,
-        height: 40,
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xFF08644C)),
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child:
-            Image.asset(assetPath, width: 25, height: 25, fit: BoxFit.contain),
       ),
     );
   }

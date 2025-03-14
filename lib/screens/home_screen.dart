@@ -5,37 +5,76 @@ import '../controllers/app_bar_controller.dart';
 import '../widgets/category_filter.dart';
 import '../widgets/banner.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_bottom_bar.dart'; // Import CustomBottomBar
+import '../screens/profile_screen.dart'; // Import ProfileScreen
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0; // Indeks untuk BottomNavigationBar
   final CategoryController categoryController = Get.put(CategoryController());
   final AppBarController appBarController = Get.put(AppBarController());
+
+  // Daftar halaman yang akan ditampilkan
+  final List<Widget> _pages = [
+    const HomeContent(), // Konten HomeScreen
+    const ProfileScreen(), // Halaman Profile
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: CustomAppBar(),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          const BannerWidget(),
-          const SizedBox(height: 20),
-          const CategoryFilter(),
-          const SizedBox(height: 20),
-          const Text(
-            "For You",
-            style: TextStyle(
-              fontFamily: "Poppins",
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Obx(() => _buildPlantList(categoryController.selectedCategory.value)),
-        ],
+      appBar: _selectedIndex == 0
+          ? CustomAppBar()
+          : null, // Tampilkan AppBar hanya di Home
+      body: _pages[_selectedIndex], // Tampilkan halaman sesuai indeks
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
+    );
+  }
+}
+
+// Pisahkan konten HomeScreen ke dalam widget terpisah
+class HomeContent extends StatelessWidget {
+  const HomeContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final CategoryController categoryController = Get.find();
+    final AppBarController appBarController = Get.find();
+
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        const BannerWidget(),
+        const SizedBox(height: 20),
+        const CategoryFilter(),
+        const SizedBox(height: 20),
+        const Text(
+          "For You",
+          style: TextStyle(
+            fontFamily: "Poppins",
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Obx(() => _buildPlantList(categoryController.selectedCategory.value)),
+      ],
     );
   }
 

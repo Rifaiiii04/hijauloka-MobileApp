@@ -1,13 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'register_screen.dart';
-import '../widgets/custom_bottom_bar.dart';
+import 'home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
+  Future<void> _login(
+      BuildContext context, String email, String password) async {
+    const url =
+        'http://localhost/p_hijauloka/login.php'; // Sesuaikan dengan URL API PHP Anda
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
+
+      print(
+          "Response Status Code: ${response.statusCode}"); // Debug status code
+      print("Response Body: ${response.body}"); // Debug response body
+
+      final responseData = jsonDecode(response.body);
+
+      if (responseData['status'] == 'success') {
+        // Login berhasil, navigasi ke HomeScreen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ),
+        );
+      } else {
+        // Login gagal, tampilkan pesan error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(responseData['message'])),
+        );
+      }
+    } catch (e) {
+      // Tangani error jika terjadi
+      print("Error: $e"); // Debug error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Terjadi kesalahan: $e")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<bool> rememberMe = ValueNotifier<bool>(false);
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -43,48 +86,42 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              _buildInputField("Username", false),
-              const SizedBox(height: 20),
-              _buildInputField("Password", true),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ValueListenableBuilder<bool>(
-                    valueListenable: rememberMe,
-                    builder: (context, value, child) {
-                      return Row(
-                        children: [
-                          Checkbox(
-                            value: value,
-                            onChanged: (newValue) {
-                              rememberMe.value = newValue!;
-                            },
-                            activeColor: const Color(0xFF08644C),
-                          ),
-                          const Text("Remember Me",
-                              style: TextStyle(fontFamily: "Poppins")),
-                        ],
-                      );
-                    },
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: "Email",
+                  labelStyle: const TextStyle(fontFamily: "Poppins"),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Color(0xFF08644C)),
                   ),
-                  const Text(
-                    "Forget password?",
-                    style: TextStyle(
-                        color: Color(0xFF08644C), fontFamily: "Poppins"),
-                  ),
-                ],
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: "Password",
+                  labelStyle: const TextStyle(fontFamily: "Poppins"),
+                  suffixIcon: const Icon(Icons.visibility_off,
+                      color: Color(0xFF08644C)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Color(0xFF08644C)),
+                  ),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                ),
+              ),
+              const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CustomBottomBar(), 
-                      ),
-                    );
+                    _login(
+                        context, emailController.text, passwordController.text);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF08644C),
@@ -124,67 +161,9 @@ class LoginScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: 50),
-              Row(
-                children: const [
-                  Expanded(child: Divider(color: Colors.black)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text("Or Sign in With",
-                        style: TextStyle(fontFamily: "Poppins")),
-                  ),
-                  Expanded(child: Divider(color: Colors.black)),
-                ],
-              ),
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildSocialButton("assets/google.png"),
-                  const SizedBox(width: 20),
-                  _buildSocialButton("assets/facebook.png"),
-                ],
-              ),
-              const SizedBox(height: 20),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  static Widget _buildInputField(String label, bool isPassword) {
-    return TextField(
-      obscureText: isPassword,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(fontFamily: "Poppins"),
-        suffixIcon: isPassword
-            ? const Icon(Icons.visibility_off, color: Color(0xFF08644C))
-            : null,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFF08644C)),
-        ),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-      ),
-    );
-  }
-
-  static Widget _buildSocialButton(String assetPath) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        width: 40,
-        height: 40,
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xFF08644C)),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child:
-            Image.asset(assetPath, width: 25, height: 25, fit: BoxFit.contain),
       ),
     );
   }

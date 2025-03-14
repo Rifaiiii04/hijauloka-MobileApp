@@ -75,7 +75,8 @@ class ProfileScreen extends StatelessWidget {
               right: 90, // Geser lebih ke kiri biar sejajar
               top: 40,
               child: IconButton(
-                icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
+                icon: const Icon(Icons.shopping_cart_outlined,
+                    color: Colors.white),
                 onPressed: () {},
               ),
             ),

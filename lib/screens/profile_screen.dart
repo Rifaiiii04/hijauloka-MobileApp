@@ -1,54 +1,15 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
 import 'login_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
-
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
-
-  final List<Widget> _screens = [
-    HomeScreen(),
-    const ProfileScreen(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        selectedItemColor: const Color(0xFF08644C),
-        unselectedItemColor: Colors.grey,
-        selectedLabelStyle: const TextStyle(fontFamily: "Poppins"),
-        unselectedLabelStyle: const TextStyle(fontFamily: "Poppins"),
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  final String userEmail;
+  final String userName;
+
+  const ProfileScreen({
+    super.key,
+    required this.userEmail,
+    required this.userName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             Positioned(
-              right: 90, // Geser lebih ke kiri biar sejajar
+              right: 90,
               top: 40,
               child: IconButton(
                 icon: const Icon(Icons.shopping_cart_outlined,
@@ -109,15 +70,15 @@ class ProfileScreen extends StatelessWidget {
               ClipOval(
                 child: Image.asset(
                   'assets/profile.JPG',
-                  width: 120.24,
-                  height: 120.24,
+                  width: 120,
+                  height: 120,
                   fit: BoxFit.cover,
                 ),
               ),
               const SizedBox(height: 10),
-              const Text(
-                'Muhamad Rifai',
-                style: TextStyle(
+              Text(
+                userName, // Nama user yang login
+                style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontFamily: "Poppins",
                   fontSize: 18,

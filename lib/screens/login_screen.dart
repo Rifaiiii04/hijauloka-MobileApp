@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'register_screen.dart';
-import 'home_screen.dart';
+import 'package:get/get.dart';
+import 'package:plantnet/screens/register_screen.dart';
+import '../controllers/user_controller.dart'; // Import UserController
+import 'home_screen.dart'; // Import HomeScreen
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   Future<void> _login(
       BuildContext context, String email, String password) async {
-    const url =
-        'http://localhost/p_hijauloka/login.php'; // Sesuaikan dengan URL API PHP Anda
+    const url = 'http://localhost/p_hijauloka/login.php';
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -18,18 +19,19 @@ class LoginScreen extends StatelessWidget {
         body: jsonEncode({'email': email, 'password': password}),
       );
 
-      print(
-          "Response Status Code: ${response.statusCode}"); // Debug status code
-      print("Response Body: ${response.body}"); // Debug response body
-
       final responseData = jsonDecode(response.body);
 
       if (responseData['status'] == 'success') {
-        // Login berhasil, navigasi ke HomeScreen
+        // Simpan data user di UserController
+        final userController = Get.put(UserController());
+        userController.setUser(
+            responseData['user']['nama'], responseData['user']['email']);
+
+        // Navigasi ke HomeScreen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => const HomeScreen(),
           ),
         );
       } else {
@@ -40,7 +42,6 @@ class LoginScreen extends StatelessWidget {
       }
     } catch (e) {
       // Tangani error jika terjadi
-      print("Error: $e"); // Debug error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Terjadi kesalahan: $e")),
       );

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/category_controller.dart';
 import '../controllers/app_bar_controller.dart';
+import '../controllers/user_controller.dart'; // Import UserController
 import '../widgets/category_filter.dart';
 import '../widgets/banner.dart';
 import '../widgets/custom_app_bar.dart';
-import '../widgets/custom_bottom_bar.dart'; // Import CustomBottomBar
-import '../screens/profile_screen.dart'; // Import ProfileScreen
+import '../widgets/custom_bottom_bar.dart';
+import 'profile_screen.dart'; // Import ProfileScreen
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,15 +17,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0; // Indeks untuk BottomNavigationBar
+  int _selectedIndex = 0;
   final CategoryController categoryController = Get.put(CategoryController());
   final AppBarController appBarController = Get.put(AppBarController());
+  final UserController userController = Get.find(); // Akses UserController
 
-  // Daftar halaman yang akan ditampilkan
-  final List<Widget> _pages = [
-    const HomeContent(), // Konten HomeScreen
-    const ProfileScreen(), // Halaman Profile
-  ];
+  late List<Widget> _pages; // Deklarasikan _pages sebagai late
+
+  @override
+  void initState() {
+    super.initState();
+    // Inisialisasi _pages di sini
+    _pages = [
+      const HomeContent(), // Konten HomeScreen
+      ProfileScreen(
+        userEmail: userController.userEmail.value, // Email user yang login
+        userName: userController.userName.value, // Nama user yang login
+      ), // Halaman Profile
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {

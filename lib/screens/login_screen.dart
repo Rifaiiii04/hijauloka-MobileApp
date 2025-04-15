@@ -21,6 +21,7 @@ class LoginScreen extends StatelessWidget {
 
       final responseData = jsonDecode(response.body);
 
+
       if (responseData['status'] == 'success') {
         // Simpan data user di UserController
         final userController = Get.put(UserController());

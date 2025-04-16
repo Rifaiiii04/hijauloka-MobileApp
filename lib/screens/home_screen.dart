@@ -8,6 +8,11 @@ import '../widgets/banner.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_bar.dart';
 import 'profile_screen.dart'; // Import ProfileScreen
+import '../models/product.dart';
+import '../controllers/cart_controller.dart';
+import 'product_detail_screen.dart';
+import 'popular_screen.dart';
+import 'collection_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,20 +25,21 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final CategoryController categoryController = Get.put(CategoryController());
   final AppBarController appBarController = Get.put(AppBarController());
-  final UserController userController = Get.find(); // Akses UserController
+  final UserController userController = Get.find();
 
-  late List<Widget> _pages; // Deklarasikan _pages sebagai late
+  late List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
-    // Inisialisasi _pages di sini
     _pages = [
-      const HomeContent(), // Konten HomeScreen
+      const HomeContent(),
+      const PopularScreen(),  // Remove the plants parameter
+      const CollectionScreen(),  // Remove the collections parameter
       ProfileScreen(
-        userEmail: userController.userEmail.value, // Email user yang login
-        userName: userController.userName.value, // Nama user yang login
-      ), // Halaman Profile
+        userEmail: userController.userEmail.value,
+        userName: userController.userName.value,
+      ),
     ];
   }
 
@@ -47,13 +53,173 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: _selectedIndex == 0
-          ? CustomAppBar()
-          : null, // Tampilkan AppBar hanya di Home
-      body: _pages[_selectedIndex], // Tampilkan halaman sesuai indeks
+      appBar: _buildAppBar(_selectedIndex),
+      body: _pages[_selectedIndex],
       bottomNavigationBar: CustomBottomBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(int index) {
+    final CartController cartController = Get.find();
+    
+    return AppBar(
+      backgroundColor: const Color(0xFF08644C),
+      title: index != 3 ? Container(
+        height: 40,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    prefixIcon: Icon(Icons.search, color: Colors.grey),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
+                  onPressed: () => Get.toNamed('/cart'),
+                ),
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Obx(() => Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '${cartController.totalItems}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )),
+                ),
+              ],
+            ),
+            Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.notifications_outlined, color: Colors.white),
+                  onPressed: () {
+                    // Handle notifications
+                  },
+                ),
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Text(
+                      '0',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ) : Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Pengaturan',
+            style: TextStyle(
+              fontFamily: "Poppins",
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          Row(
+            children: [
+              Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
+                    onPressed: () => Get.toNamed('/cart'),
+                  ),
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Obx(() => Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        '${cartController.totalItems}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )),
+                  ),
+                ],
+              ),
+              Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.notifications_outlined, color: Colors.white),
+                    onPressed: () {
+                      // Handle notifications
+                    },
+                  ),
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Text(
+                        '0',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -65,114 +231,236 @@ class HomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CategoryController categoryController = Get.find();
-    final AppBarController appBarController = Get.find();
+    final CartController cartController = Get.find();
 
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        const BannerWidget(),
-        const SizedBox(height: 20),
-        const CategoryFilter(),
-        const SizedBox(height: 20),
         const Text(
-          "For You",
+          "Produk Terlaris",
           style: TextStyle(
             fontFamily: "Poppins",
-            fontSize: 18,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
+            color: Color(0xFF08644C),
           ),
         ),
-        const SizedBox(height: 10),
-        Obx(() => _buildPlantList(categoryController.selectedCategory.value)),
+        const Text(
+          "Tanaman hias pilihan terbaik yang paling diminati",
+          style: TextStyle(
+            fontFamily: "Poppins",
+            fontSize: 14,
+            color: Colors.grey,
+          ),
+        ),
+        const SizedBox(height: 20),
+        _buildBestSellerGrid(cartController),
+        const SizedBox(height: 30),
+        const Text(
+          "Untuk Anda",
+          style: TextStyle(
+            fontFamily: "Poppins",
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF08644C),
+          ),
+        ),
+        const Text(
+          "Temukan koleksi tanaman hias terbaru untuk Anda",
+          style: TextStyle(
+            fontFamily: "Poppins",
+            fontSize: 14,
+            color: Colors.grey,
+          ),
+        ),
+        const SizedBox(height: 20),
+        _buildForYouGrid(cartController),
       ],
     );
   }
 
-  Widget _buildPlantList(String selectedCategory) {
-    List<String> plants = [];
-    if (selectedCategory == "All") {
-      plants = ["Plant 1", "Plant 2", "Plant 3", "Plant 4"];
-    } else if (selectedCategory == "Indoor") {
-      plants = ["Indoor Plant 1", "Indoor Plant 2"];
-    } else if (selectedCategory == "Outdoor") {
-      plants = ["Outdoor Plant 1", "Outdoor Plant 2", "Outdoor Plant 3"];
-    }
+  Widget _buildProductCard({
+    required String name,
+    required double price,
+    required String image,
+    required List<String> tags,
+    required double rating,
+    required CartController cartController,
+  }) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+            child: Image.asset(
+              image,
+              height: 150,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontFamily: "Poppins",
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Wrap(
+                  spacing: 4,
+                  children: tags.map((tag) => Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      tag,
+                      style: const TextStyle(
+                        color: Color(0xFF08644C),
+                        fontSize: 12,
+                      ),
+                    ),
+                  )).toList(),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    ...List.generate(5, (index) => Icon(
+                      index < rating.floor() ? Icons.star : Icons.star_border,
+                      color: Colors.amber,
+                      size: 16,
+                    )),
+                    Text(
+                      ' ($rating)',
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Rp${price.toStringAsFixed(0)}',
+                      style: const TextStyle(
+                        fontFamily: "Poppins",
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF08644C),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.add_shopping_cart),
+                      color: const Color(0xFF08644C),
+                      onPressed: () {
+                        cartController.addToCart(name, price, image);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBestSellerGrid(CartController cartController) {
+    final products = [
+      {
+        'name': 'Lidah Mertua',
+        'price': 32000.0,
+        'image': 'assets/plant1.png',
+        'tags': ['Outdoor', 'Mudah dirawat'],
+        'rating': 4.5,
+      },
+      {
+        'name': 'Peace Lily',
+        'price': 42000.0,
+        'image': 'assets/plant2.png',
+        'tags': ['Indoor', 'Outdoor'],
+        'rating': 4.5,
+      },
+    ];
 
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: plants.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
+        childAspectRatio: 0.7,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        childAspectRatio: 0.7,
       ),
+      itemCount: products.length,
       itemBuilder: (context, index) {
-        return Card(
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(10)),
-                    image: DecorationImage(
-                      image: AssetImage("assets/plant${index + 1}.png"),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      plants[index],
-                      style: const TextStyle(
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Rp. 25.000",
-                          style: TextStyle(
-                            fontFamily: "Poppins",
-                            color: Color.fromARGB(255, 27, 81, 29),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 27, 81, 29),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Icon(
-                            Icons.add_shopping_cart,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+        final product = products[index];
+        return _buildProductCard(
+          name: product['name'] as String,
+          price: product['price'] as double,
+          image: product['image'] as String,
+          tags: (product['tags'] as List).cast<String>(),
+          rating: product['rating'] as double,
+          cartController: cartController,
+        );
+      },
+    );
+  }
+
+  Widget _buildForYouGrid(CartController cartController) {
+    final products = [
+      {
+        'name': 'Monstera',
+        'price': 26000.0,
+        'image': 'assets/plant3.png',
+        'tags': ['Indoor', 'Mudah dirawat'],
+        'rating': 4.5,
+      },
+      {
+        'name': 'Peace Lily',
+        'price': 42000.0,
+        'image': 'assets/plant2.png',
+        'tags': ['Indoor', 'Outdoor'],
+        'rating': 4.5,
+      },
+    ];
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.7,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemCount: products.length,
+      itemBuilder: (context, index) {
+        final product = products[index];
+        return _buildProductCard(
+          name: product['name'] as String,
+          price: product['price'] as double,
+          image: product['image'] as String,
+          tags: (product['tags'] as List).cast<String>(),
+          rating: product['rating'] as double,
+          cartController: cartController,
         );
       },
     );

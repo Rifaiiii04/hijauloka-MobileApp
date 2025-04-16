@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'screens/login_screen.dart';
-import 'controllers/user_controller.dart'; // Import UserController
+import 'screens/cart_screen.dart';  // Add this import
+import 'controllers/user_controller.dart';
+import 'controllers/cart_controller.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Get.put(CartController());
+  Get.put(UserController());
   runApp(const MyApp());
 }
 
@@ -12,9 +17,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Inisialisasi UserController di sini
-    Get.put(UserController());
-
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -26,6 +28,12 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: const LoginScreen(),
+      getPages: [
+        GetPage(
+          name: '/cart',
+          page: () => const CartScreen(),
+        ),
+      ],
     );
   }
 }

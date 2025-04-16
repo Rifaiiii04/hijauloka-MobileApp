@@ -13,10 +13,19 @@ class CustomBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      items: const [
+      type: BottomNavigationBarType.fixed,
+      items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.star),
+          label: 'Populer',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.collections_bookmark),
+          label: 'Koleksi',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
@@ -24,8 +33,17 @@ class CustomBottomBar extends StatelessWidget {
         ),
       ],
       currentIndex: selectedIndex,
-      selectedItemColor: Colors.green,
+      selectedItemColor: const Color.fromARGB(255, 27, 81, 29),
+      unselectedItemColor: Colors.grey,
       onTap: onItemTapped,
+      selectedLabelStyle: const TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 12,
+      ),
+      unselectedLabelStyle: const TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 12,
+      ),
     );
   }
 }
